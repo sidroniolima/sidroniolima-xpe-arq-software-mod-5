@@ -1,8 +1,6 @@
 package br.com.sidroniolima.xpe.model.product;
 
 import br.com.sidroniolima.xpe.model.Identifier;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
 
 import java.util.Objects;
 import java.util.UUID;

@@ -10,6 +10,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequestMapping(value = "products")
 @Tag(name = "Product")
 public interface ProductAPI {
@@ -24,7 +26,31 @@ public interface ProductAPI {
             @ApiResponse(responseCode = "422", description = "A validation error was thrown"),
             @ApiResponse(responseCode = "500", description = "A internal server error was thrown")
     })
-    ResponseEntity<?> createProduct(@RequestBody ProductRequest aRequest);
+    ResponseEntity<?> create(@RequestBody ProductRequest aRequest);
+
+    @PutMapping(
+            value = "{id}",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @Operation(summary = "Update a product by it's identifier")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Updated successfully"),
+            @ApiResponse(responseCode = "404", description = "A validation error was thrown"),
+            @ApiResponse(responseCode = "500", description = "A internal server error was thrown")
+    })
+    ResponseEntity<?> update(@PathVariable(name = "id") String id, @RequestBody ProductRequest aRequest);
+
+    @DeleteMapping(
+            value = "{id}"
+    )
+    @Operation(summary = "Delete a product by it's identifier")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Deleted successfully"),
+            @ApiResponse(responseCode = "404", description = "A validation error was thrown"),
+            @ApiResponse(responseCode = "500", description = "A internal server error was thrown")
+    })
+    void deleteById(@PathVariable(name = "id") String id);
 
     @GetMapping(
             value = "{id}",
@@ -36,5 +62,28 @@ public interface ProductAPI {
             @ApiResponse(responseCode = "404", description = "Product was not found"),
             @ApiResponse(responseCode = "500", description = "A internal server error was thrown")
     })
-    ProductResponse getById(@PathVariable(name = "id") String id);
+    ResponseEntity<?> getById(@PathVariable(name = "id") String id);
+
+    @GetMapping(
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @Operation(summary = "List all products")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Listed successfully"),
+            @ApiResponse(responseCode = "500", description = "A internal server error was thrown")
+    })
+    List<ProductResponse> list(
+            @RequestParam(name="search", required = false, defaultValue = "") final String search
+    );
+
+    @GetMapping(
+            path = "/count",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @Operation(summary = "Return the number of products")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Counted successfully"),
+            @ApiResponse(responseCode = "500", description = "A internal server error was thrown")
+    })
+    ResponseEntity<?> count();
 }

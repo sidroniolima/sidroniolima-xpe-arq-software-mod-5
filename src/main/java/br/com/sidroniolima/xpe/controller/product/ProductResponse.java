@@ -12,5 +12,4 @@ public record ProductResponse(
     @JsonProperty("created_at") Instant createdAt,
     @JsonProperty("updated_at") Instant updatedAt,
     @JsonProperty("deleted_at") Instant deletedAt
-){
-}
+){ }

@@ -1,9 +1,9 @@
 package br.com.sidroniolima.xpe.model.product;
 
 import br.com.sidroniolima.xpe.model.Entity;
+import br.com.sidroniolima.xpe.utils.InstantUtils;
 
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 
 public class Product extends Entity<ProductID> {
 
@@ -37,7 +37,7 @@ public class Product extends Entity<ProductID> {
             final double aPrice
     ) {
         final var anId = ProductID.unique();
-        final var now = Instant.now().truncatedTo(ChronoUnit.MICROS);
+        final var now = InstantUtils.now();
         final var deleteAt = isActive ? null : now;
 
         return new Product(anId, aDescription, isActive, aPrice, now, now, deleteAt);
@@ -58,6 +58,33 @@ public class Product extends Entity<ProductID> {
                 createdAt,
                 updatedAt,
                 deletedAt);
+    }
+
+    public Product update(String aDescription, Boolean isActive, Double aPrice) {
+        if (isActive) {
+            activate();
+        } else {
+            deactivate();
+        }
+
+        this.description = aDescription;
+        this.price = aPrice;
+        this.updatedAt = InstantUtils.now();
+
+        return this;
+    }
+
+    private void activate() {
+        if (getDeletedAt() == null) {
+            this.deletedAt = InstantUtils.now();
+        }
+
+        this.active = false;
+    }
+
+    private void deactivate() {
+        this.deletedAt = null;
+        this.active = true;
     }
 
     public String getDescription() {

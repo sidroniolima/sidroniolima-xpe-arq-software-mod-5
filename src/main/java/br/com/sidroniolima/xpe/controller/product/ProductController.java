@@ -3,10 +3,13 @@ package br.com.sidroniolima.xpe.controller.product;
 import br.com.sidroniolima.xpe.controller.api.ProductAPI;
 import br.com.sidroniolima.xpe.service.product.CreateProductCommand;
 import br.com.sidroniolima.xpe.service.product.ProductService;
+import br.com.sidroniolima.xpe.service.product.UpdateProductCommand;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Objects;
 
 @RestController
@@ -20,7 +23,7 @@ public class ProductController implements ProductAPI {
     }
 
     @Override
-    public ResponseEntity<?> createProduct(final ProductRequest aRequest) {
+    public ResponseEntity<?> create(final ProductRequest aRequest) {
         final var aCommand = CreateProductCommand.with(
                 aRequest.description(),
                 aRequest.active(),
@@ -33,10 +36,37 @@ public class ProductController implements ProductAPI {
     }
 
     @Override
-    public ProductResponse getById(final String anId) {
+    public ResponseEntity<?> update(String anId, ProductRequest aRequest) {
+        final var aCommand = UpdateProductCommand.with(
+                anId,
+                aRequest.description(),
+                aRequest.active(),
+                aRequest.price()
+        );
+
+        final var updatedId = this.productService.update(aCommand);
+
+        if (updatedId == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        return ResponseEntity.ok(updatedId);
+    }
+
+    @Override
+    public void deleteById(String anId) {
+        this.productService.delete(anId);
+    }
+
+    @Override
+    public ResponseEntity<?> getById(final String anId) {
         final var product = this.productService.getById(anId);
 
-        return new ProductResponse(
+        if (product == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        return ResponseEntity.ok(new ProductResponse(
                 product.getId().getValue(),
                 product.getDescription(),
                 product.isActive(),
@@ -44,6 +74,28 @@ public class ProductController implements ProductAPI {
                 product.getCreatedAt(),
                 product.getUpdatedAt(),
                 product.getDeletedAt()
-        );
+        ));
+    }
+
+    @Override
+    public List<ProductResponse> list(final String search) {
+        return this.productService.listAll(search)
+                .stream()
+                .map(product -> {
+                    return new ProductResponse(
+                            product.getId().getValue(),
+                            product.getDescription(),
+                            product.isActive(),
+                            product.getPrice(),
+                            product.getCreatedAt(),
+                            product.getUpdatedAt(),
+                            product.getDeletedAt()
+                    );
+                }).toList();
+    }
+
+    @Override
+    public ResponseEntity<?> count() {
+        return ResponseEntity.ok(this.productService.count());
     }
 }
