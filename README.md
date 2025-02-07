@@ -1,4 +1,4 @@
-# 📌 E-commerce API - Padrão arquiteturial MVC
+# 📌 E-commerce API - Padrão arquitetural MVC
 
 Este projeto implementa operações de CRUD (Create, Read, Update, Delete) e as expõe por meio de uma API REST desenvolvida com **Spring Boot**. A arquitetura utilizada combina o padrão **MVC** com os princípios da **Clean Architecture**, garantindo um código modular, testável e de fácil manutenção.
 
