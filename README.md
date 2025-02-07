@@ -25,7 +25,7 @@ O domínio escolhido para implementação foi **Produto**, e a aplicação utili
 
 A API está documentada com **Swagger**. Para acessar a documentação interativa, suba a aplicação e acesse:
 
-🔗 [Swagger UI](http://localhost:8080/swagger-ui/index.html)
+🔗 [Swagger UI](http://localhost:8080/api/swagger-ui/index.html)
 
 ## 🚀 Como Executar o Projeto
 
