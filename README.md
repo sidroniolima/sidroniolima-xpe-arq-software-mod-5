@@ -39,7 +39,7 @@ A API está documentada com **Swagger**. Para acessar a documentação interativ
    ```
 3. **Suba os containers** do banco de dados e da API:
    ```sh
-   docker-compose up --build
+   docker compose up --build
    ```
 4. A API estará disponível em:
    ```
