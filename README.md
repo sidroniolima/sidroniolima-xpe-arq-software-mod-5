@@ -83,7 +83,7 @@ A seguir, a correlação entre as camadas do padrão MVC e os packages do projet
 
 ## 📄 Licença
 
-Este projeto foi feito para fins educativo como atividade do módulo 5 do curso Arquitetura de Software da XPE.
+Este projeto foi criado como atividade do módulo 5 do curso **Arquitetura de Software** da XPE.
 
 ---
 
